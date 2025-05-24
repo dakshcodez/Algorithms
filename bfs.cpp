@@ -28,16 +28,48 @@ void bfs(unordered_map<char, vector<char>> &graph, char start){
     }
 }
 
+int shortest_path_len(unordered_map<char, vector<char>> &graph, char start, char goal) {
+    queue<char> q;
+    unordered_set<char> visited;
+    int path_length = 0;
+    q.push(start);
+
+    while (!q.empty()) {
+        int len = q.size();
+        for (int i = 0; i < len; i++){
+            char node = q.front();
+            q.pop();
+
+            if (visited.count(node)) continue;
+
+            if (node == goal){
+                return path_length;
+            }
+
+            for (char neighbour: graph[node]) {
+                if (!visited.count(neighbour)){
+                    q.push(neighbour);
+                }
+            }
+        }
+        path_length++;
+    }
+    return -1;
+}
+
 int main(){
    unordered_map<char, vector<char>> graph = {
         {'A', {'B', 'C'}},
-        {'B', {'A', 'D'}},
+        {'B', {'A', 'C'}},
         {'C', {'A', 'E'}},
         {'D', {'B'}},
-        {'E', {'C'}}
+        {'E', {'C', 'D'}}
     };
 
     bfs(graph, 'A');
+    cout<<endl;
+    int res = shortest_path_len(graph, 'A', 'D');
+    cout<<res<<endl;
     return 0;
 }
     
